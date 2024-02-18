@@ -1,0 +1,78 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Category {
+  slug        String    @id
+  title       String
+  description String
+  Product     Product[]
+}
+
+model Product {
+  id           String      @id @default(uuid())
+  title        String
+  slug         String
+  description  String?     @db.Text
+  prices       Decimal
+  stock        Int
+  images       String
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+  categorySlug String
+  Category     Category    @relation(fields: [categorySlug], references: [slug])
+  orderItems   OrderItem[]
+}
+
+model Coupon {
+  id          String  @id @default(uuid())
+  code        String
+  description String? @db.Text
+  discount    Decimal
+  percentage  Int
+}
+
+model profiles {
+  id      String    @id @default(cuid())
+  orders  Order[]
+  address Address[]
+}
+
+model Order {
+  id               String      @id @default(uuid())
+  token            String
+  transationStatus String
+  userId           String
+  user             profiles    @relation(fields: [userId], references: [id])
+  midtransResponse Json?
+  createdAt        DateTime    @default(now())
+  updatedAt        DateTime    @updatedAt
+  orderItems       OrderItem[]
+}
+
+model OrderItem {
+  id        String  @id @default(uuid())
+  orderId   String
+  order     Order   @relation(fields: [orderId], references: [id])
+  productId String
+  product   Product @relation(fields: [productId], references: [id])
+}
+
+model Address {
+  id         String   @id @default(uuid())
+  street     String   @db.VarChar(255)
+  city       String   @db.VarChar(100)
+  province   String   @db.VarChar(100)
+  country    String   @db.VarChar(100)
+  postalCode String   @db.VarChar(100)
+  userId     String
+  user       profiles @relation(fields: [userId], references: [id])
+}
