@@ -18,6 +18,8 @@ import {
   getCouponByUnique,
 } from '../coupon/coupon.controler.js';
 
+import { registerAdmins } from '../users/user.controller.js';
+
 const publicRouter = express.Router();
 publicRouter.get('/', (res) => res.send('Under construction 👷🏼‍♂️👷🏼'));
 //product
@@ -25,7 +27,7 @@ publicRouter.get('/products', getProducts);
 publicRouter.get('/products/:id', getProductsById);
 
 //user
-publicRouter.post('/users', registerUsers);
+publicRouter.post('/users/register', registerUsers);
 publicRouter.post('/users/login', loginUsers);
 publicRouter.post('/users/logout', logoutUsers);
 
@@ -36,5 +38,8 @@ publicRouter.get('/category/:slug', getCategoriesByUnique);
 //coupon
 publicRouter.get('/coupon', getAllCoupons);
 publicRouter.get('/coupon/:id', getCouponByUnique);
+
+//admin
+publicRouter.post('/admin', registerAdmins);
 
 export { publicRouter };

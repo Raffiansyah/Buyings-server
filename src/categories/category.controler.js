@@ -16,8 +16,9 @@ const getAllCategories = async (req, res, next) => {
 };
 
 const getCategoriesByUnique = async (req, res, next) => {
+  const { slug } = req.params;
   try {
-    const result = await getCategoryByUnique(req.params.slug);
+    const result = await getCategoryByUnique(slug);
     res.send(result);
   } catch (error) {
     next(error);
@@ -27,9 +28,6 @@ const getCategoriesByUnique = async (req, res, next) => {
 const createCategories = async (req, res, next) => {
   const data = req.body;
   try {
-    if(!(data.slug && data.title && data.decsription)){
-      throw new ResponseError('Some Fields are missing');
-    }
     const result = await createNewCategory(data);
     res.send({
       message: 'Category created successfully',
@@ -42,11 +40,9 @@ const createCategories = async (req, res, next) => {
 
 const updateCategories = async (req, res, next) => {
   const data = req.body;
+  const { slug } = req.params;
   try {
-    if(!(data.slug && data.title && data.decsription)){
-      throw new ResponseError('Some Fields are missing');
-    }
-    const result = await updateCategoryByUnique(req.params.slug, data);
+    const result = await updateCategoryByUnique(slug, data);
     res.send({
       message: 'Category updated successfully',
       data: result,
@@ -57,8 +53,9 @@ const updateCategories = async (req, res, next) => {
 };
 
 const deleteCategories = async (req, res, next) => {
+  const { slug } = req.params;
   try {
-    const result = await deleteCategoryByUnique(req.params.slug);
+    const result = await deleteCategoryByUnique(slug);
     res.send({
       message: 'Category deleted successfully',
       data: result,

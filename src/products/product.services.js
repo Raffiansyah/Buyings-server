@@ -1,4 +1,5 @@
 import {
+  isProductExist,
   findProducts,
   findProductsId,
   createProduct,
@@ -6,6 +7,10 @@ import {
   updateProduct,
 } from './product.repository.js';
 import { ResponseError } from '../error/response-error.js';
+import {
+  createProductValidation,
+  updateProductValidation,
+} from '../validation/productsValidation.js';
 
 const getAllProducts = async () => {
   const products = await findProducts();
@@ -24,6 +29,13 @@ const getProductById = async (id) => {
 };
 
 const createNewProduct = async (product) => {
+  const ProductExist = await isProductExist(product.slug);
+  const validate = createProductValidation(product);
+  if (validate.error) {
+    throw new ResponseError(validate.error.message);
+  } else if (ProductExist) {
+    throw new ResponseError('Product is Exist');
+  }
   const createdProduct = await createProduct(product);
   return createdProduct;
 };
@@ -39,8 +51,11 @@ const deleteProductById = async (id) => {
 
 const updateProductById = async (id, productData) => {
   const product = await getProductById(id);
+  const validate = updateProductValidation(productData);
   if (!product) {
     throw new ResponseError('Product not found');
+  } else if (validate.error) {
+    throw new ResponseError(validate.error.message);
   }
   const updatedProduct = await updateProduct(id, productData);
   return updatedProduct;

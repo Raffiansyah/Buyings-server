@@ -1,5 +1,14 @@
 import { prisma } from '../application/databases.js';
 
+const isCategoryExist = async (slug) => {
+  const category = await prisma.category.findFirst({
+    where: {
+      slug,
+    },
+  });
+  return category;
+};
+
 const findCategory = async () => {
   const category = await prisma.category.findMany({
     include: {
@@ -13,6 +22,9 @@ const findCategoryByUnique = async (slug) => {
   const category = await prisma.category.findUnique({
     where: {
       slug,
+    },
+    include: {
+      Product: true,
     },
   });
   return category;
@@ -46,6 +58,7 @@ const deleteCategory = async (slug) => {
 };
 
 export {
+  isCategoryExist,
   findCategory,
   findCategoryByUnique,
   createCategory,

@@ -38,7 +38,7 @@ const loginUsers = async (req, res, next) => {
     const users = await loginUser(req.body);
     res.send({
       message: 'Welcome 🤘🏼🤘🏼',
-      token: users.data.session.access_token,
+      data: users.data.session,
     });
   } catch (error) {
     next(error);

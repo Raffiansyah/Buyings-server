@@ -1,4 +1,3 @@
-import { ResponseError } from '../error/response-error.js';
 import {
   createNewAddress,
   deleteAddressById,
@@ -8,8 +7,9 @@ import {
 } from './address.services.js';
 
 const getAllAddresss = async (req, res, next) => {
+  const data = req.body;
   try {
-    const result = await getAddress();
+    const result = await getAddress(data.userId);
     res.send(result);
   } catch (error) {
     next(error);
@@ -17,8 +17,10 @@ const getAllAddresss = async (req, res, next) => {
 };
 
 const getAddressesById = async (req, res, next) => {
+  const data = req.body;
+  const { id } = req.params;
   try {
-    const result = await getAddressById(req.params.id);
+    const result = await getAddressById(id, data.userId);
     res.send(result);
   } catch (error) {
     next(error);
@@ -28,18 +30,6 @@ const getAddressesById = async (req, res, next) => {
 const createAddress = async (req, res, next) => {
   const data = req.body;
   try {
-    if (
-      !(
-        data.street &&
-        data.city &&
-        data.country &&
-        data.postalCode &&
-        data.province &&
-        data.userId
-      )
-    ) {
-      throw new ResponseError('some fields are missing');
-    }
     const result = await createNewAddress(data);
     res.send({
       message: 'Address created successfully',
@@ -52,20 +42,9 @@ const createAddress = async (req, res, next) => {
 
 const updateAddress = async (req, res, next) => {
   const data = req.body;
+  const { id } = req.params;
   try {
-    if (
-      !(
-        data.street &&
-        data.city &&
-        data.country &&
-        data.postalCode &&
-        data.province &&
-        data.userId
-      )
-    ) {
-      throw new ResponseError('some fields are missing');
-    }
-    const result = await updateAddressById(req.params.id, data);
+    const result = await updateAddressById(id, data);
     res.send({
       message: 'Address updated successfully',
       data: result,
@@ -76,8 +55,9 @@ const updateAddress = async (req, res, next) => {
 };
 
 const deleteAddress = async (req, res, next) => {
+  const { id } = req.params;
   try {
-    const result = await deleteAddressById(req.params.id);
+    const result = await deleteAddressById(id);
     res.send({
       message: 'Address deleted successfully',
       data: result,

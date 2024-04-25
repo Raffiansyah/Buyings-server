@@ -1,5 +1,14 @@
 import { prisma } from '../application/databases.js';
 
+const isProductExist = async (slug) => {
+  const products = await prisma.product.findFirst({
+    where: {
+      slug,
+    },
+  });
+  return products;
+};
+
 const findProducts = async () => {
   const products = await prisma.product.findMany();
   return products;
@@ -31,11 +40,18 @@ const deleteProduct = async (id) => {
 const updateProduct = async (id, productData) => {
   const product = await prisma.product.update({
     where: {
-      id
+      id,
     },
     data: productData,
   });
   return product;
 };
 
-export { findProducts, findProductsId, createProduct, deleteProduct, updateProduct };
+export {
+  isProductExist,
+  findProducts,
+  findProductsId,
+  createProduct,
+  deleteProduct,
+  updateProduct,
+};

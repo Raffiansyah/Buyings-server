@@ -30,6 +30,7 @@ model Product {
   categorySlug String
   Category     Category    @relation(fields: [categorySlug], references: [slug])
   orderItems   OrderItem[]
+  cartItems    CartItem[]
 }
 
 model Coupon {
@@ -44,18 +45,25 @@ model profiles {
   id      String    @id @default(cuid())
   orders  Order[]
   address Address[]
+  cart    Cart[]
+}
+
+enum TRANSACTION_STATUS {
+  PENDING
+  PAID
+  CANCEL
 }
 
 model Order {
-  id               String      @id @default(uuid())
-  token            String
-  transationStatus String
-  userId           String
-  user             profiles    @relation(fields: [userId], references: [id])
-  midtransResponse Json?
-  createdAt        DateTime    @default(now())
-  updatedAt        DateTime    @updatedAt
-  orderItems       OrderItem[]
+  id                String             @id @default(uuid())
+  token             String
+  transactionStatus TRANSACTION_STATUS
+  userId            String
+  user              profiles           @relation(fields: [userId], references: [id])
+  totalPrice        Decimal
+  createdAt         DateTime           @default(now())
+  updatedAt         DateTime           @updatedAt
+  orderItems        OrderItem[]
 }
 
 model OrderItem {
@@ -75,4 +83,20 @@ model Address {
   postalCode String   @db.VarChar(100)
   userId     String
   user       profiles @relation(fields: [userId], references: [id])
+}
+
+model Cart {
+  id        String     @id @default(cuid())
+  userId    String
+  user      profiles   @relation(fields: [userId], references: [id])
+  CartItems CartItem[]
+}
+
+model CartItem {
+  id        String  @id @default(uuid())
+  cartId    String
+  cart      Cart    @relation(fields: [cartId], references: [id])
+  productId String
+  product   Product @relation(fields: [productId], references: [id])
+  quantity  Int
 }

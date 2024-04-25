@@ -1,14 +1,19 @@
 import { prisma } from '../application/databases.js';
 
-const findAddress = async () => {
-  const address = await prisma.address.findMany();
+const findAddress = async (userId) => {
+  const address = await prisma.address.findMany({
+    where: {
+      userId
+    }
+  });
   return address;
 };
 
-const findAddressById = async (id) => {
+const findAddressById = async (id, userId) => {
   const address = await prisma.address.findUnique({
     where: {
-      id: id,
+      id,
+      userId
     },
   });
   return address;

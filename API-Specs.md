@@ -1,67 +1,92 @@
-# Api Specification
+# Buyings Api Specification
 
-## Customers
+## 1. Category
+### Get Many (Public)
+~~~
+Method: GET
+URL: /category
+~~~
+Output :
+~~~json
+{
+    {
+        "slug": "vegetable",
+        "title": "Vegetable",
+        "description": "Fresh Vegetable",
+        "Product": []
+    }
+}
+~~~
 
-### Categories
-- get all categories !
-- get detail category !
+### Get Detail (Public)
+~~~
+Method: GET
+URL: /category/:slug
+~~~
+Output :
+~~~json
+{
+    "slug": "vegetable",
+    "title": "Vegetable",
+    "description": "Fresh Vegetable",
+    "Product": []
+}
+~~~
 
-### Products
-- get all products !
-- get detail product !
+### Create Data (Admin)
+~~~
+Method: POST
+URL: /category
+~~~
+Authorization: 
+~~~
+`Bearer ${Token}`
+~~~
+Input :
+~~~json
+{
+    "slug": "snack",
+    "title": "Snack",
+    "description": "Fresh Snack"
+}
+~~~
+Output :
+~~~json
+{
+    "message": "Category created successfully",
+    "data": {
+        "slug": "snack",
+        "title": "Snack",
+        "description": "Fresh Snack"
+    }
+}
+~~~
 
-### Users 
-- reigister !
-- login !
-- logout !
-- get profile
-- update profile
-
-### Cupons 
-- get cupons !
-
-### Carts
-- get all carts
-- get detail cart
-- delete all carts
-- delete cart by id
-
-### Orders 
-- checkouts
-- get all orders
-- delete all orders
-- delete orders by id
-
-### Addresses
-- get all addresses !
-- create addresses !
-- update addresses !
-- delete addresses !
-
-## Admin
-
-### Products
-- create products !
-- update products !
-- delete products !
-- get all products !
-- get detail product !
-
-### Users
-- get all users
-- delete users
-- get detail user
-
-### Cupons
-- create cupons !
-- update cupons !
-- delete cupons !
-- get all cupons !
-- get detail cupon !
-
-### Categories
-- create categories !
-- update categories !
-- delete categories !
-- get all categories !
-- get detail category !
+### Update Data (Admin)
+~~~
+Method: PATCH
+URL: /category/:slug
+~~~
+Authorization: 
+~~~
+`Bearer ${Token}`
+~~~
+Input :
+~~~json
+{
+    "slug": "snack",
+    "title": "Snack",
+    "description": "Fresh Snack"
+}
+~~~
+Output :
+~~~json
+{
+    "message": "Category created successfully",
+    "data": {
+        "slug": "snack",
+        "title": "Snack",
+        "description": "Fresh Snack"
+    }
+}
+~~~
