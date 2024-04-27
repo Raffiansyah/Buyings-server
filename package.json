@@ -5,7 +5,9 @@
   "main": "src/index.js",
   "type": "module",
   "scripts": {
-    "dev": "nodemon ."
+    "dev": "nodemon .",
+    "postinstall": "prisma generate",
+    "build": "prisma generate && <actual-build-command>"
   },
   "author": "Raffiansyah",
   "license": "ISC",
