@@ -21,7 +21,7 @@ import {
 import { registerAdmins } from '../users/user.controller.js';
 
 const publicRouter = express.Router();
-publicRouter.get('/', (res) => res.send('Under construction 👷🏼‍♂️👷🏼'));
+publicRouter.get('/', (req, res) => res.send('Under construction 👷🏼‍♂️👷🏼'));
 //product
 publicRouter.get('/products', getProducts);
 publicRouter.get('/products/:id', getProductsById);
