@@ -47,7 +47,7 @@ const loginUsers = async (req, res, next) => {
 
 const logoutUsers = async (req, res, next) => {
   try {
-    const users = await logoutUser();
+    await logoutUser();
     res.send('Good Bye 👋🏼👋🏼');
   } catch (error) {
     next(error);

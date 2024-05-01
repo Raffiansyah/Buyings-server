@@ -46,7 +46,7 @@ const updateAddressById = async (id, data) => {
 };
 
 const deleteAddressById = async (id) => {
-  const address = getAddressById(id);PageTransitionEvent
+  const address = getAddressById(id);
   if (!address) {
     throw new ResponseError('Address not found');
   }

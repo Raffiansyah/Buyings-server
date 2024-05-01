@@ -27,7 +27,7 @@ const loginUser = async (user) => {
 };
 
 const logoutUser = async () => {
-  const logoutUser = await logout();
+  await logout();
 };
 
 export { getAllUsers, registerUser, registerAdmin, loginUser, logoutUser };
