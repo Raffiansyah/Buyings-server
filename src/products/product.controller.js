@@ -5,6 +5,7 @@ import {
   deleteProductById,
   updateProductById,
 } from './product.services.js';
+import { decode } from 'base64-arraybuffer';
 
 const getProducts = async (req, res, next) => {
   try {
@@ -27,8 +28,10 @@ const getProductsById = async (req, res, next) => {
 
 const createProduct = async (req, res, next) => {
   const productData = req.body;
+  const file = req.file.buffer;
   try {
-    const result = await createNewProduct(productData);
+  const productImages = decode(file.toString('base64'));
+    const result = await createNewProduct(productData, productImages);
     res.send({
       message: 'Product created successfully',
       data: result,
@@ -40,8 +43,9 @@ const createProduct = async (req, res, next) => {
 
 const deleteProductsById = async (req, res, next) => {
   const { id } = req.params;
+  const { imagePath } = req.body
   try {
-    await deleteProductById(id);
+    await deleteProductById(id, imagePath);
     res.send('Product deleted successfully');
   } catch (error) {
     next(error);

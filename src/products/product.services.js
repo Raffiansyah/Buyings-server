@@ -28,7 +28,7 @@ const getProductById = async (id) => {
   return product;
 };
 
-const createNewProduct = async (product) => {
+const createNewProduct = async (product, productImages) => {
   const ProductExist = await isProductExist(product.slug);
   const validate = createProductValidation(product);
   if (validate.error) {
@@ -36,16 +36,16 @@ const createNewProduct = async (product) => {
   } else if (ProductExist) {
     throw new ResponseError('Product is Exist');
   }
-  const createdProduct = await createProduct(product);
+  const createdProduct = await createProduct(product, productImages);
   return createdProduct;
 };
 
-const deleteProductById = async (id) => {
+const deleteProductById = async (id, imagePath) => {
   const product = await getProductById(id);
   if (!product) {
     throw new ResponseError('Product not found');
   }
-  const deletedProduct = await deleteProduct(id);
+  const deletedProduct = await deleteProduct(id, imagePath);
   return deletedProduct;
 };
 

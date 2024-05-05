@@ -1,4 +1,5 @@
 import express from 'express';
+import { upload } from '../lib/multer.js';
 import { roleMiddleware } from '../middleware/role-middleware.js';
 import {
   createProduct,
@@ -20,8 +21,9 @@ import {
 const AdminRouter = express.Router();
 AdminRouter.use(roleMiddleware);
 
+
 //product
-AdminRouter.post('/products', createProduct);
+AdminRouter.post('/products', upload , createProduct);
 AdminRouter.patch('/products/:id', updateProductsById);
 AdminRouter.delete('/products/:id', deleteProductsById);
 

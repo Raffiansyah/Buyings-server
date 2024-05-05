@@ -1,4 +1,5 @@
 import { prisma } from '../application/databases.js';
+import { supabaseAdmin } from '../lib/supabases.js';
 
 const isProductExist = async (slug) => {
   const products = await prisma.product.findFirst({
@@ -23,18 +24,42 @@ const findProductsId = async (id) => {
   return product;
 };
 
-const createProduct = async (product) => {
-  const createdProduct = await prisma.product.create({ data: product });
+const createProduct = async (product, productImages) => {
+  const { data, error } = await supabaseAdmin.storage
+    .from('ProductImages')
+    .upload(`products/${Date.now()}`, productImages, {
+      contentType: 'image/png',
+    });
+  if (error) {
+    return error.message;
+  }
+  const createdProduct = await prisma.product.create({
+    data: {
+      title: product.title,
+      slug: product.slug,
+      stock: parseInt(product.stock),
+      prices: product.prices,
+      categorySlug: product.categorySlug,
+      description: product.description,
+      images: data.path,
+    },
+  });
   return createdProduct;
 };
 
-const deleteProduct = async (id) => {
+const deleteProduct = async (id, imagePath) => {
+  const { data, error } = await supabaseAdmin.storage
+    .from('ProductImages')
+    .remove(imagePath);
+  if(error){
+    return error
+  }
   const deletedProduct = await prisma.product.delete({
     where: {
       id,
     },
   });
-  return deletedProduct;
+  return deletedProduct, data;
 };
 
 const updateProduct = async (id, productData) => {
