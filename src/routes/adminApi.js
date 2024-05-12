@@ -23,7 +23,7 @@ AdminRouter.use(roleMiddleware);
 
 
 //product
-AdminRouter.post('/products', upload , createProduct);
+AdminRouter.post('/products', upload.single('productImages') , createProduct);
 AdminRouter.patch('/products/:id', updateProductsById);
 AdminRouter.delete('/products/:id', deleteProductsById);
 

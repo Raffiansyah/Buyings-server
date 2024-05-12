@@ -7,6 +7,7 @@ import {
   registerUsers,
   loginUsers,
   logoutUsers,
+  getUsers,
 } from '../users/user.controller.js';
 import {
   getAllCategories,
@@ -30,6 +31,7 @@ publicRouter.get('/products/:id', getProductsById);
 publicRouter.post('/users/register', registerUsers);
 publicRouter.post('/users/login', loginUsers);
 publicRouter.post('/users/logout', logoutUsers);
+publicRouter.get('/users', getUsers)
 
 //category
 publicRouter.get('/category', getAllCategories);
