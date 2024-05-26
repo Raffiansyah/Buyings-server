@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
 
 export const roleMiddleware = async (req, res, next) => {
-  const token = req.cookies.token;
+  const token = req.headers?.authorization?.split(' ')[1];
   const supabaseKey = process.env.JWT_SECRET_KEY;
   try {
     if (token) {
