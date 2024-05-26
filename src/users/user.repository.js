@@ -1,10 +1,5 @@
 import { supabase, supabaseAdmin } from '../lib/supabases.js';
 
-const findUsers = async () => {
-  const users = await supabase.auth.getUser();
-  return users;
-};
-
 const createAdmin = async (user) => {
   const createAdmin = await supabaseAdmin.auth.admin.createUser({
     email: user.email,
@@ -49,4 +44,4 @@ const logout = async () => {
   return logoutUser;
 };
 
-export { findUsers, createUsers, createAdmin, login, logout };
+export { createUsers, createAdmin, login, logout };

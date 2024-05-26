@@ -1,19 +1,9 @@
 import {
-  getAllUsers,
   registerUser,
   registerAdmin,
   loginUser,
   logoutUser,
 } from './user.services.js';
-
-const getUsers = async (req, res, next) => {
-  try {
-    const users = await getAllUsers();
-    res.send(users.data);
-  } catch (error) {
-    next(error);
-  }
-};
 
 const registerAdmins = async (req, res, next) => {
   try {
@@ -36,9 +26,13 @@ const registerUsers = async (req, res, next) => {
 const loginUsers = async (req, res, next) => {
   try {
     const users = await loginUser(req.body);
-    res.send({
+    res.cookie('token', users.data.session.access_token, {
+      maxAge: users.data.session.expires_in,
+      httpOnly: true,
+      // secure: true,
+    }).json({
       message: 'Welcome 🤘🏼🤘🏼',
-      data: users.data.session,
+      data: users.data.user
     });
   } catch (error) {
     next(error);
@@ -48,10 +42,10 @@ const loginUsers = async (req, res, next) => {
 const logoutUsers = async (req, res, next) => {
   try {
     await logoutUser();
-    res.send('Good Bye 👋🏼👋🏼');
+    res.clearCookie('token').json({ message: 'Good Bye 👋🏼👋🏼'})
   } catch (error) {
     next(error);
   }
 };
 
-export { getUsers, registerUsers, registerAdmins, loginUsers, logoutUsers };
+export { registerUsers, registerAdmins, loginUsers, logoutUsers };

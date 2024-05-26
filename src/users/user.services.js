@@ -1,15 +1,4 @@
-import {
-  findUsers,
-  createUsers,
-  createAdmin,
-  login,
-  logout,
-} from './user.repository.js';
-
-const getAllUsers = async () => {
-  const users = await findUsers();
-  return users;
-};
+import { createUsers, createAdmin, login, logout } from './user.repository.js';
 
 const registerUser = async (user) => {
   const registeredUser = await createUsers(user);
@@ -30,4 +19,4 @@ const logoutUser = async () => {
   await logout();
 };
 
-export { getAllUsers, registerUser, registerAdmin, loginUser, logoutUser };
+export { registerUser, registerAdmin, loginUser, logoutUser };

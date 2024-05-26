@@ -14,6 +14,6 @@ export const roleMiddleware = async (req, res, next) => {
       return res.status(401).json({ error: 'Not Authorized, Access Denied' });
     }
   } catch (error) {
-    return res.status(401).json({ error: 'Invalid Token, Auth Denied' });
+    return res.status(401).json({ error: 'Invalid Token, Auth Denied', message: error });
   }
 };
