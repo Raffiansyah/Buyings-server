@@ -1,42 +1,53 @@
 import { supabase, supabaseAdmin } from '../lib/supabases.js';
 
 const createAdmin = async (user) => {
-  const createAdmin = await supabaseAdmin.auth.admin.createUser({
-    email: user.email,
-    user_metadata: {
-      username: user.username,
-      full_name: user.full_name,
-      avatar_url: user.avatar_url,
-    },
-    password: user.password,
-    email_confirm: true,
-    role: 'admin',
-  });
-  return createAdmin;
+  try {
+    const { data } = await supabaseAdmin.auth.admin.createUser({
+      email: user.email,
+      password: user.password,
+      user_metadata: {
+        first_name: user.first_name,
+        last_name: user.last_name,
+        avatar_url: user.avatar_url,
+      },
+      email_confirm: true,
+      role: 'admin',
+    });
+    return data;
+  } catch (error) {
+    return error;
+  }
 };
 
 const createUsers = async (user) => {
-  const createUsers = await supabase.auth.signUp({
-    email: user.email,
-    password: user.password,
-    phone: parseInt(user.phone),
-    options: {
-      data: {
-        username: user.username,
-        full_name: user.full_name,
-        avatar_url: user.avatar_url,
+  try {
+    const { data } = await supabase.auth.signUp({
+      email: user.email,
+      password: user.password,
+      options: {
+        data: {
+          first_name: user.first_name,
+          last_name: user.last_name,
+          avatar_url: user.avatar_url,
+        },
       },
-    },
-  });
-  return createUsers;
+    });
+    return data;
+  } catch (error) {
+    return error;
+  }
 };
 
 const login = async (user) => {
-  const loginUser = await supabase.auth.signInWithPassword({
-    email: user.email,
-    password: user.password,
-  });
-  return loginUser;
+  try {
+    const loginUser = await supabase.auth.signInWithPassword({
+      email: user.email,
+      password: user.password,
+    });
+    return loginUser;
+  } catch (error) {
+    return error
+  }
 };
 
 const logout = async () => {
