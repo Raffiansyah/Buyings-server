@@ -5,7 +5,6 @@ import {
   updateCouponById,
   deleteCouponById,
 } from './coupon.services.js';
-import { ResponseError } from '../error/response-error.js';
 
 const getAllCoupons = async (req, res, next) => {
   try {
@@ -28,9 +27,6 @@ const getCouponByUnique = async (req, res, next) => {
 const createCoupon = async (req, res, next) => {
   const data = req.body;
   try {
-    if (!(data.code && data.discount && data.percentage)) {
-      throw new ResponseError('All fields are required');
-    }
     const result = await createNewCoupon(data);
     res.send({
       message: 'Coupon created successfully',
@@ -42,11 +38,7 @@ const createCoupon = async (req, res, next) => {
 };
 
 const updateCoupon = async (req, res, next) => {
-  const data = req.body;
   try {
-    if (!(data.code && data.discount && data.percentage)) {
-      throw new ResponseError('All fields are required');
-    }
     const result = await updateCouponById(req.params.id, req.body);
     res.send({
       message: 'Coupon updated successfully',

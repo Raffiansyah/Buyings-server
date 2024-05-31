@@ -27,9 +27,9 @@ publicRouter.get('/products', getProducts);
 publicRouter.get('/products/:id', getProductsById);
 
 //user
-publicRouter.post('/users/register', registerUsers);
-publicRouter.post('/users/login', loginUsers);
-publicRouter.post('/users/logout', logoutUsers);
+publicRouter.post('/register', registerUsers);
+publicRouter.post('/login', loginUsers);
+publicRouter.post('/logout', logoutUsers);
 
 //category
 publicRouter.get('/category', getAllCategories);
