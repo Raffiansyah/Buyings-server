@@ -1,18 +1,40 @@
 import { prisma } from '../application/databases.js';
 import { supabaseAdmin } from '../lib/supabases.js';
 
-const isProductExist = async (slug) => {
+const isProductExist = async (title) => {
   const products = await prisma.product.findFirst({
     where: {
-      slug,
+      title,
     },
   });
   return products;
 };
 
-const findProducts = async () => {
-  const products = await prisma.product.findMany();
-  return products;
+const findProducts = async (searchQuery, pageQuery) => {
+  const page = parseInt(pageQuery) || 0;
+  const limit = 5;
+  const offset = limit * page;
+  const totalRows = await prisma.product.count({
+    where: {
+      title: {
+        contains: searchQuery,
+      },
+    },
+  });
+  const totalPage = Math.ceil(totalRows / limit);
+  const products = await prisma.product.findMany({
+    take: limit,
+    where: {
+      title: {
+        contains: searchQuery,
+      },
+    },
+    skip: offset,
+    orderBy: {
+      createdAt: 'desc',
+    },
+  });
+  return { products, totalPage, totalRows, limit, page };
 };
 
 const findProductsId = async (id) => {
@@ -31,12 +53,12 @@ const createProduct = async (product, productImages) => {
       contentType: 'image/png',
     });
   if (error) {
-    return error.message;
+    throw new Error(error);
   }
   const createdProduct = await prisma.product.create({
     data: {
       title: product.title,
-      slug: product.slug,
+      slug: product.slug.toLowerCase(),
       stock: parseInt(product.stock),
       prices: product.prices,
       categorySlug: product.categorySlug,
@@ -48,18 +70,18 @@ const createProduct = async (product, productImages) => {
 };
 
 const deleteProduct = async (id, imagePath) => {
-  const { data, error } = await supabaseAdmin.storage
+  const { error } = await supabaseAdmin.storage
     .from('ProductImages')
     .remove(imagePath);
-  if(error){
-    return error
+  if (error) {
+    throw new Error(error);
   }
   const deletedProduct = await prisma.product.delete({
     where: {
       id,
     },
   });
-  return deletedProduct, data;
+  return deletedProduct;
 };
 
 const updateProduct = async (id, productData) => {

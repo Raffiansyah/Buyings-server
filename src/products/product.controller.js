@@ -7,52 +7,60 @@ import {
 } from './product.services.js';
 import { decode } from 'base64-arraybuffer';
 
-const getProducts = async (req, res, next) => {
+const getProducts = async (req, res) => {
+  const { Page, Search } = req.query;
   try {
-    const result = await getAllProducts();
+    const result = await getAllProducts(Search, Page);
     res.send(result);
   } catch (error) {
-    next(error);
+    res.status(400).send(error.message);
   }
 };
 
-const getProductsById = async (req, res, next) => {
+const getProductsById = async (req, res) => {
   const { id } = req.params;
   try {
-    const result = await getProductById(id);
-    res.send(result);
+    const { products, totalPage, totalRows, limit, page } =
+      await getProductById(id);
+    res.json({
+      page,
+      products,
+      limit,
+      totalRows,
+      totalPage,
+    });
   } catch (error) {
-    next(error);
+    res.status(400).send(error.message);
   }
 };
 
-const createProduct = async (req, res, next) => {
+const createProduct = async (req, res) => {
   const productData = req.body;
   const file = req.file.buffer;
   try {
-  const productImages = decode(file.toString('base64'));
+    const productImages = decode(file.toString('base64'));
     const result = await createNewProduct(productData, productImages);
     res.send({
       message: 'Product created successfully',
       data: result,
     });
   } catch (error) {
-    next(error);
+    res.status(400).send(error.message);
   }
 };
 
-const deleteProductsById = async (req, res, next) => {
+const deleteProductsById = async (req, res) => {
   const { id } = req.params;
-  const { imagePath } = req.body
+  const { imagePath } = req.body;
   try {
     await deleteProductById(id, imagePath);
     res.send('Product deleted successfully');
   } catch (error) {
-    next(error);
+    res.status(400).send(error.message);
   }
 };
 
-const updateProductsById = async (req, res, next) => {
+const updateProductsById = async (req, res) => {
   const productData = req.body;
   const { id } = req.params;
   try {
@@ -62,7 +70,7 @@ const updateProductsById = async (req, res, next) => {
       data: product,
     });
   } catch (error) {
-    next(error);
+    res.status(400).send(error.message);
   }
 };
 

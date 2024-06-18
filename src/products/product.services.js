@@ -11,29 +11,32 @@ import {
   updateProductValidation,
 } from '../validation/productsValidation.js';
 
-const getAllProducts = async () => {
-  const products = await findProducts();
+const getAllProducts = async (Search, Page) => {
+  const { products, totalPage, totalRows, limit, page } = await findProducts(
+    Search,
+    Page
+  );
   if (!products) {
-    return 'Products not found';
+    throw new Error('Products not found');
   }
-  return products;
+  return { products, totalPage, totalRows, limit, page };
 };
 
 const getProductById = async (id) => {
   const product = await findProductsId(id);
   if (!product) {
-    return 'Product not found';
+    throw new Error('Products not found');
   }
   return product;
 };
 
 const createNewProduct = async (product, productImages) => {
-  const ProductExist = await isProductExist(product.slug);
+  const ProductExist = await isProductExist(product.title);
   const validate = createProductValidation(product);
   if (validate.error) {
-    return validate.error.message;
+    throw new Error(validate.error.message);
   } else if (ProductExist) {
-    return 'Product is Exist';
+    throw new Error('Product is Exist');
   }
   const createdProduct = await createProduct(product, productImages);
   return createdProduct;
@@ -42,7 +45,7 @@ const createNewProduct = async (product, productImages) => {
 const deleteProductById = async (id, imagePath) => {
   const product = await getProductById(id);
   if (!product) {
-    return 'Product not found';
+    throw new Error('Product not found');
   }
   const deletedProduct = await deleteProduct(id, imagePath);
   return deletedProduct;
@@ -52,9 +55,9 @@ const updateProductById = async (id, productData) => {
   const product = await getProductById(id);
   const validate = updateProductValidation(productData);
   if (!product) {
-    return 'Product not found';
+    throw new Error('Product not found');
   } else if (validate.error) {
-    return validate.error.message;
+    throw new Error(validate.error.message);
   }
   const updatedProduct = await updateProduct(id, productData);
   return updatedProduct;
