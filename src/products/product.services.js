@@ -11,10 +11,12 @@ import {
   updateProductValidation,
 } from '../validation/productsValidation.js';
 
-const getAllProducts = async (Search, Page) => {
+const getAllProducts = async (Search, Page, Category, Filter) => {
   const { products, totalPage, totalRows, limit, page } = await findProducts(
     Search,
-    Page
+    Page,
+    Category,
+    Filter
   );
   if (!products) {
     throw new Error('Products not found');

@@ -10,14 +10,30 @@ const isProductExist = async (title) => {
   return products;
 };
 
-const findProducts = async (searchQuery, pageQuery) => {
+const findProducts = async (
+  searchQuery,
+  pageQuery,
+  cateQuerry,
+  filterQuery
+) => {
+  let orderBy = {};
+  if (filterQuery == 'price_asc') {
+    orderBy.prices = 'asc';
+  } else if (filterQuery == 'price_desc') {
+    orderBy.prices = 'desc';
+  } else if (filterQuery == 'product_desc') {
+    orderBy.createdAt = 'desc';
+  }
   const page = parseInt(pageQuery) || 0;
-  const limit = 5;
+  const limit = 10;
   const offset = limit * page;
   const totalRows = await prisma.product.count({
     where: {
       title: {
         contains: searchQuery,
+      },
+      categorySlug: {
+        contains: cateQuerry,
       },
     },
   });
@@ -28,11 +44,12 @@ const findProducts = async (searchQuery, pageQuery) => {
       title: {
         contains: searchQuery,
       },
+      categorySlug: {
+        contains: cateQuerry,
+      },
     },
     skip: offset,
-    orderBy: {
-      createdAt: 'desc',
-    },
+    orderBy,
   });
   return { products, totalPage, totalRows, limit, page };
 };
@@ -60,7 +77,7 @@ const createProduct = async (product, productImages) => {
       title: product.title,
       slug: product.slug.toLowerCase(),
       stock: parseInt(product.stock),
-      prices: product.prices,
+      prices: parseInt(product.prices),
       categorySlug: product.categorySlug,
       description: product.description,
       images: data.path,

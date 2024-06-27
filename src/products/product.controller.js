@@ -8,9 +8,9 @@ import {
 import { decode } from 'base64-arraybuffer';
 
 const getProducts = async (req, res) => {
-  const { Page, Search } = req.query;
+  const { Page, Search, Category, sort_by } = req.query;
   try {
-    const result = await getAllProducts(Search, Page);
+    const result = await getAllProducts(Search, Page, Category, sort_by);
     res.send(result);
   } catch (error) {
     res.status(400).send(error.message);
