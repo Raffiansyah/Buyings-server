@@ -38,6 +38,22 @@ const createUsers = async (user) => {
   return data;
 };
 
+const updateUser = async (user, userImage) => {
+  const { data, error } = await supabaseAdmin.storage
+    .from('Avatars')
+    .upload(`avatar/${Date.now()}`, userImage);
+  if (error) {
+    throw new Error(error);
+  }
+  const updatedUser = await supabase.auth.updateUser({
+    data: {
+      username: user.username,
+      avatar_url: data.path,
+    },
+  });
+  return 'Succes update user';
+};
+
 const login = async (user) => {
   const { data, error } = await supabase.auth.signInWithPassword({
     email: user.email,
@@ -56,4 +72,4 @@ const logout = async () => {
   }
 };
 
-export { createUsers, createAdmin, login, logout };
+export { createUsers, createAdmin, login, logout, updateUser };

@@ -2,7 +2,13 @@ import {
   createAdminValidation,
   createUserValidation,
 } from '../validation/userValidation.js';
-import { createUsers, createAdmin, login, logout } from './user.repository.js';
+import {
+  createUsers,
+  createAdmin,
+  login,
+  logout,
+  updateUser,
+} from './user.repository.js';
 
 const registerAdmin = async (user) => {
   const validate = createAdminValidation(user);
@@ -22,6 +28,11 @@ const registerUser = async (user) => {
   return newUser;
 };
 
+const updateUsers = async (user, userImage) => {
+  const users = await updateUser(user, userImage);
+  return users;
+};
+
 const loginUser = async (user) => {
   const dataUser = await login(user);
   return dataUser;
@@ -31,4 +42,4 @@ const logoutUser = async () => {
   await logout();
 };
 
-export { registerUser, registerAdmin, loginUser, logoutUser };
+export { registerUser, registerAdmin, loginUser, logoutUser, updateUsers };
