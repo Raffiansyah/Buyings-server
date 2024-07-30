@@ -14,14 +14,9 @@ import {
   deletedCarts,
   deletedItemsCart,
 } from '../cart/cart.controller.js';
-import { upload } from '../lib/multer.js';
-import { updatedUsers } from '../users/user.controller.js';
 
 const CustRouter = express.Router();
 CustRouter.use(authMiddleware);
-
-//user
-CustRouter.post('/user/update', upload.single('avatars'), updatedUsers)
 
 //address
 CustRouter.get('/address', getAllAddresss);

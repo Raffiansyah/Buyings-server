@@ -16,14 +16,12 @@ import {
   deleteCoupon,
   updateCoupon,
 } from '../coupon/coupon.controler.js';
-// import { registerAdmins } from '../users/user.controller.js'  
 
 const AdminRouter = express.Router();
 AdminRouter.use(roleMiddleware);
 
-
 //product
-AdminRouter.post('/products', upload.single('productImages') , createProduct);
+AdminRouter.post('/products', upload.single('productImages'), createProduct);
 AdminRouter.patch('/products/:id', updateProductsById);
 AdminRouter.delete('/products/:id', deleteProductsById);
 
@@ -36,8 +34,5 @@ AdminRouter.patch('/category/:slug', updateCategories);
 AdminRouter.post('/coupon', createCoupon);
 AdminRouter.delete('/coupon/:id', deleteCoupon);
 AdminRouter.patch('/coupon/:id', updateCoupon);
-
-//admin
-// AdminRouter.post('/admin', registerAdmins)
 
 export { AdminRouter };

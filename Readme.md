@@ -2,7 +2,7 @@
 
 ## 1. Authentication
 
-### - Sign-up/Register User (Public)
+### - Sign-up/Register User
 ~~~
 Method: POST
 URL: /register
@@ -22,7 +22,7 @@ URL: /register
 }
 ~~~
 
-### - Login User (Public)
+### - Login User
 ~~~
 Method: POST
 URL: /login
