@@ -97,4 +97,14 @@ export default new (class UserServices {
       throw new Error(error.message);
     }
   }
+
+  async verifyOTP(hashToken) {
+    try {
+      await userRepository.verifyOTP(hashToken);
+      logger.info(`UserService: verifying otp successfully`);
+    } catch (error) {
+      logger.error(`UserService: Failed to veridy otp`);
+      throw new Error(error.message);
+    }
+  }
 })();

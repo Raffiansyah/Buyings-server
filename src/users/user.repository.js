@@ -153,4 +153,23 @@ export default new (class UserRepository {
       throw new Error(`${error.message}`);
     }
   }
+
+  //function to verifying otp
+  async verifyOTP(hashToken) {
+    try {
+      const { error } = await supabase.auth.verifyOtp({
+        token_hash: hashToken,
+        type: 'email',
+      });
+      if (error) {
+        logger.error(
+          `UserRepository: Failed to verify otp because ${error.message}`
+        );
+        throw new Error(`${error.message}`);
+      }
+      logger.info(`UserRepository: Success to verify otp`);
+    } catch (error) {
+      throw new Error(`${error.message}`);
+    }
+  }
 })();

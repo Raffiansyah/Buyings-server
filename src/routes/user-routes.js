@@ -5,6 +5,7 @@ import {
   logout,
   refreshSession,
   updateUser,
+  verifyOTP,
 } from '../users/user.controller.js';
 import { upload } from '../lib/multer.js';
 import { authMiddleware } from '../middleware/auth-middleware.js';
@@ -18,6 +19,7 @@ routes.post('/register', createUser);
 routes.post('/login', login);
 routes.post(`/logout`, logout);
 routes.get('/user/refresh-session', refreshSession);
+routes.post('/user/verifyOTP', verifyOTP);
 routes.post(
   '/user/update',
   authMiddleware,
@@ -25,4 +27,4 @@ routes.post(
   updateUser
 );
 
-export { routes }
+export { routes };

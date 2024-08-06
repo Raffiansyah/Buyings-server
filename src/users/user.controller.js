@@ -90,4 +90,24 @@ async function refreshSession(req, res) {
   }
 }
 
-export { createAdmin, createUser, updateUser, login, logout, refreshSession };
+async function verifyOTP(req, res) {
+  const { hashToken } = req.body;
+  try {
+    await userServices.verifyOTP(hashToken);
+    logger.info(`UserController: Verifying otp successfully`);
+    res.send({ message: 'Verifying otp successfully' });
+  } catch (error) {
+    logger.error(`UserController: failed to Verifying otp: ${error.message}`);
+    res.status(400).send({ message: error.message });
+  }
+}
+
+export {
+  createAdmin,
+  createUser,
+  updateUser,
+  login,
+  logout,
+  refreshSession,
+  verifyOTP,
+};
