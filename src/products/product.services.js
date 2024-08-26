@@ -1,74 +1,61 @@
-import {
-  isProductExist,
-  findProducts,
-  findProductsId,
-  createProduct,
-  deleteProduct,
-  updateProduct,
-} from './product.repository.js';
+import productRepository from './product.repository.js';
 import {
   createProductValidation,
   updateProductValidation,
 } from '../validation/productsValidation.js';
 
-const getAllProducts = async (Search, Page, Category, Filter) => {
-  const { products, totalPage, totalRows, limit, page } = await findProducts(
-    Search,
-    Page,
-    Category,
-    Filter
-  );
-  if (!products) {
-    throw new Error('Products not found');
+export default new (class ProductServices {
+  async getAllProducts(Search, Page, Category, Filter) {
+    const { products, totalPage, totalRows, limit, page } =
+      await productRepository.findProducts(Search, Page, Category, Filter);
+    if (!products) {
+      throw new Error('Products not found');
+    }
+    return { products, totalPage, totalRows, limit, page };
   }
-  return { products, totalPage, totalRows, limit, page };
-};
 
-const getProductById = async (id) => {
-  const product = await findProductsId(id);
-  if (!product) {
-    throw new Error('Products not found');
+  async getProductById(id) {
+    const product = await productRepository.findProductsId(id);
+    if (!product) {
+      throw new Error('Products not found');
+    }
+    return product;
   }
-  return product;
-};
 
-const createNewProduct = async (product, productImages) => {
-  const ProductExist = await isProductExist(product.title);
-  const validate = createProductValidation(product);
-  if (validate.error) {
-    throw new Error(validate.error.message);
-  } else if (ProductExist) {
-    throw new Error('Product is Exist');
+  async createNewProduct(product, productImages) {
+    const ProductExist = await productRepository.isProductExist(product.title);
+    const validate = createProductValidation(product);
+    if (validate.error) {
+      throw new Error(validate.error.message);
+    } else if (ProductExist) {
+      throw new Error('Product is Exist');
+    }
+    const { path } = await productRepository.uploadProductImg(productImages);
+    const createdProduct = await productRepository.createProduct(product, path);
+    return createdProduct;
   }
-  const createdProduct = await createProduct(product, productImages);
-  return createdProduct;
-};
 
-const deleteProductById = async (id, imagePath) => {
-  const product = await getProductById(id);
-  if (!product) {
-    throw new Error('Product not found');
+  async deleteProductById(id, imagePath) {
+    const product = await productRepository.findProductsId(id);
+    if (!product) {
+      throw new Error('Product not found');
+    }
+    const deletedProduct = await productRepository.deleteProduct(id, imagePath);
+    return deletedProduct;
   }
-  const deletedProduct = await deleteProduct(id, imagePath);
-  return deletedProduct;
-};
 
-const updateProductById = async (id, productData) => {
-  const product = await getProductById(id);
-  const validate = updateProductValidation(productData);
-  if (!product) {
-    throw new Error('Product not found');
-  } else if (validate.error) {
-    throw new Error(validate.error.message);
+  async updateProductById(id, productData) {
+    const product = await productRepository.findProductsId(id);
+    const validate = updateProductValidation(productData);
+    if (!product) {
+      throw new Error('Product not found');
+    } else if (validate.error) {
+      throw new Error(validate.error.message);
+    }
+    const updatedProduct = await productRepository.updateProduct(
+      id,
+      productData
+    );
+    return updatedProduct;
   }
-  const updatedProduct = await updateProduct(id, productData);
-  return updatedProduct;
-};
-
-export {
-  getAllProducts,
-  getProductById,
-  createNewProduct,
-  deleteProductById,
-  updateProductById,
-};
+})();
