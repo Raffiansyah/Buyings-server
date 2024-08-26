@@ -63,7 +63,7 @@ export default new (class UserRepository {
     try {
       const { data, error } = await supabaseAdmin.storage
         .from('Avatars')
-        .upload(`avatar/${Date.now()}`, userAvatar);
+        .upload(`avatar/${Date.now()}`, userAvatar, { contentType: 'image/png' });
       if (error) {
         logger.error(
           `UserRepository: Failed to upload file because ${error.message}`
