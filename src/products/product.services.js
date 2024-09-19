@@ -27,9 +27,10 @@ export default new (class ProductServices {
     const validate = createProductValidation(product);
     if (validate.error) {
       throw new Error(validate.error.message);
-    } else if (ProductExist) {
-      throw new Error('Product is Exist');
     }
+    // } else if (ProductExist) {
+    //   throw new Error('Product is Exist');
+    // }
     const { path } = await productRepository.uploadProductImg(productImages);
     const createdProduct = await productRepository.createProduct(product, path);
     return createdProduct;
