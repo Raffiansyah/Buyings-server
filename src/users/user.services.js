@@ -47,8 +47,10 @@ export default new (class UserServices {
   //service function to update user
   async updateUser(user, userAvatar) {
     try {
-      const avatarUrl = await userRepository.uploadAvatar(userAvatar);
-      user.avatar_url = avatarUrl.path;
+      if (userAvatar !== null) {
+        const avatarUrl = await userRepository.uploadAvatar(userAvatar);
+        user.avatar_url = avatarUrl.path;
+      }
       const data = await userRepository.updateUser(user);
       logger.info(`UserService: Success to update user ${data.user.email}`);
       return data;
