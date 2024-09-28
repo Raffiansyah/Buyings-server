@@ -12,7 +12,7 @@ export default new (class UserRepository {
           first_name: user.first_name,
           last_name: user.last_name,
           username: user.username,
-          avatar_url: null,
+          avatar_url: "",
         },
         email_confirm: true,
         role: 'admin',
@@ -41,7 +41,7 @@ export default new (class UserRepository {
             first_name: user.first_name,
             last_name: user.last_name,
             username: user.username,
-            avatar_url: null,
+            avatar_url: "",
           },
         },
       });
