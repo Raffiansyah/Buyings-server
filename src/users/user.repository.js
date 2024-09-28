@@ -78,7 +78,7 @@ export default new (class UserRepository {
   }
 
   //function for update user
-  async updateUser(user, avatar_url) {
+  async updateUser(user) {
     try {
       const { data, error } = await supabase.auth.updateUser({
         email: user.email,
@@ -86,7 +86,7 @@ export default new (class UserRepository {
           username: user.username,
           first_name: user.first_name,
           last_name: user.last_name,
-          avatar_url,
+          avatar_url: user.avatar_url,
         },
       });
       if (error) {

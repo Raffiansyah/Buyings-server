@@ -50,8 +50,9 @@ export default new (class UserServices {
       let avatarUrl
       if (userAvatar !== null) {
         avatarUrl = await userRepository.uploadAvatar(userAvatar);
+        user.avatar_url = avatarUrl.path
       }
-      const data = await userRepository.updateUser(user, avatarUrl.path);
+      const data = await userRepository.updateUser(user);
       logger.info(`UserService: Success to update user ${data.user.email}`);
       return data;
     } catch (error) {
