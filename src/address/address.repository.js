@@ -3,8 +3,8 @@ import { prisma } from '../application/databases.js';
 const findAddress = async (userId) => {
   const address = await prisma.address.findMany({
     where: {
-      userId
-    }
+      userId,
+    },
   });
   return address;
 };
@@ -13,25 +13,39 @@ const findAddressById = async (id, userId) => {
   const address = await prisma.address.findUnique({
     where: {
       id,
-      userId
+      userId,
     },
   });
   return address;
 };
 
-const createAddress = async (data) => {
+const createAddress = async (data, userId) => {
   const address = await prisma.address.create({
-    data: data,
+    data: {
+      userId,
+      street: data.street,
+      province: data.province,
+      city: data.city,
+      country: data.country,
+      postalCode: data.postalCode,
+    },
   });
   return address;
 };
 
-const updateAddress = async (id, data) => {
+const updateAddress = async (id, data, userId) => {
   const updatedAddress = await prisma.address.update({
     where: {
       id: id,
     },
-    data: data,
+    data: {
+      userId,
+      street: data.street,
+      province: data.province,
+      city: data.city,
+      country: data.country,
+      postalCode: data.postalCode,
+    },
   });
   return updatedAddress;
 };

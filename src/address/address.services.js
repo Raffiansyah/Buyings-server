@@ -13,7 +13,7 @@ import {
 const getAddressById = async (id, userId) => {
   const address = await findAddressById(id, userId);
   if (!address) {
-    return 'Address not found';
+    throw new Error('Address not found');
   }
   return address;
 };
@@ -21,36 +21,36 @@ const getAddressById = async (id, userId) => {
 const getAddress = async (userId) => {
   const address = await findAddress(userId);
   if (!address) {
-    return 'Address not found';
+    throw new Error('Address not found');
   }
   return address;
 };
 
-const createNewAddress = async (data) => {
+const createNewAddress = async (data, userId) => {
   const validate = createAddressValidation(data);
   if (validate.error) {
-    return validate.error.message;
+    throw new Error(validate.error.message);
   }
-  const newAddress = await createAddress(data);
+  const newAddress = await createAddress(data, userId);
   return newAddress;
 };
 
-const updateAddressById = async (id, data) => {
+const updateAddressById = async (id, data, userId) => {
   const address = getAddressById(id);
   const validate = updateAddressValidation(data);
   if (!address) {
-    return 'Address not found';
+    throw new Error('Address not found');
   } else if (validate.error) {
-    return validate.error.message;
+    throw new Error(validate.error.message);
   }
-  const updatedAddress = await updateAddress(id, data);
+  const updatedAddress = await updateAddress(id, data, userId);
   return updatedAddress;
 };
 
 const deleteAddressById = async (id) => {
   const address = getAddressById(id);
   if (!address) {
-    return 'Address not found';
+    throw new Error('Address not found');
   }
   const deletedAddress = await deleteAddress(id);
   return deletedAddress;

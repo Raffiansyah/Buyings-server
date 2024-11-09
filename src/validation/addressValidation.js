@@ -7,7 +7,6 @@ const createAddressValidation = (data) => {
     province: Joi.string().min(3).max(100).required(),
     country: Joi.string().min(3).max(50).required(),
     postalCode: Joi.string().min(3).max(20).required(),
-    userId: Joi.string().guid({ version: 'uuidv4' }).min(3).max(100).required(),
   });
   const validation = createAddresSchema.validate(data);
   return validation;
@@ -20,7 +19,6 @@ const updateAddressValidation = (data) => {
     province: Joi.string().min(3).max(100).optional(),
     country: Joi.string().min(3).max(50).optional(),
     postalCode: Joi.string().min(3).max(20).required(),
-    userId: Joi.string().guid({ version: 'uuidv4' }).min(3).max(100).optional(),
   });
   const validation = updateAddresSchema.validate(data);
   return validation;

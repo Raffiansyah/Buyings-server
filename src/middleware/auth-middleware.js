@@ -5,7 +5,8 @@ export const authMiddleware = async (req, res, next) => {
     const token = req.headers?.authorization?.split(' ')[1];
     const supabaseKey = process.env.JWT_SECRET_KEY;
     if (token) {
-      jwt.verify(token, supabaseKey);
+      const decoded = jwt.verify(token, supabaseKey);
+      req.userId = decoded.sub
     } else {
       return res.status(401).json({ error: 'No Token, Auth Denied' });
     }
