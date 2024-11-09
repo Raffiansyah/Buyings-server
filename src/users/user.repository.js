@@ -81,8 +81,6 @@ export default new (class UserRepository {
   async updateUser(user) {
     try {
       const { data, error } = await supabase.auth.updateUser({
-        email: user.email,
-        phone: user.phone,
         data: {
           username: user.username,
           first_name: user.first_name,
