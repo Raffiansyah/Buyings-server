@@ -7,7 +7,6 @@ import {
 } from './address.repository.js';
 import {
   createAddressValidation,
-  updateAddressValidation,
 } from '../validation/addressValidation.js';
 
 const getAddressById = async (id, userId) => {
@@ -37,11 +36,8 @@ const createNewAddress = async (data, userId) => {
 
 const updateAddressById = async (id, data, userId) => {
   const address = getAddressById(id);
-  const validate = updateAddressValidation(data);
   if (!address) {
     throw new Error('Address not found');
-  } else if (validate.error) {
-    throw new Error(validate.error.message);
   }
   const updatedAddress = await updateAddress(id, data, userId);
   return updatedAddress;

@@ -21,7 +21,7 @@ export default new (class UserRepository {
         logger.error(
           `UserRepository: Failed to creating an admin ${user.email} because ${error.message}`
         );
-        throw new Error(`${error.message}`);
+        throw new Error(`${error}`);
       }
       logger.info(`UserRepository: Success to creating admin ${user.email}`);
       return data;

@@ -2,6 +2,7 @@ import Joi from 'joi';
 
 const createAddressValidation = (data) => {
   const createAddresSchema = Joi.object({
+    label: Joi.string().min(3).max(100).required(),
     street: Joi.string().min(3).max(100).required(),
     city: Joi.string().min(3).max(100).required(),
     province: Joi.string().min(3).max(100).required(),
@@ -12,16 +13,4 @@ const createAddressValidation = (data) => {
   return validation;
 };
 
-const updateAddressValidation = (data) => {
-  const updateAddresSchema = Joi.object({
-    street: Joi.string().min(3).max(100).required(),
-    city: Joi.string().min(3).max(100).optional(),
-    province: Joi.string().min(3).max(100).optional(),
-    country: Joi.string().min(3).max(50).optional(),
-    postalCode: Joi.string().min(3).max(20).required(),
-  });
-  const validation = updateAddresSchema.validate(data);
-  return validation;
-};
-
-export { createAddressValidation, updateAddressValidation };
+export { createAddressValidation };

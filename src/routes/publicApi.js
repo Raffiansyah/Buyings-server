@@ -13,7 +13,7 @@ import {
   getAllCoupons,
   getCouponByUnique,
 } from '../coupon/coupon.controler.js';
-import { createUser, login, logout, refreshSession, verifyOTP } from '../users/user.controller.js';
+import { createAdmin, createUser, login, logout, refreshSession, verifyOTP } from '../users/user.controller.js';
 import { specs } from '../lib/swagger.js';
 
 const publicRouter = express.Router();
@@ -24,6 +24,7 @@ publicRouter.get('/', (req, res) => res.send('Under construction 👷🏼‍♂�
 publicRouter.use('/docs', serve, setup(specs))
 
 //user
+publicRouter.post('/admin/register', createAdmin)
 publicRouter.post('/register', createUser)
 publicRouter.post('/login', login)
 publicRouter.post('/logout', logout)
