@@ -45,19 +45,25 @@ export default new (class UserServices {
   }
 
   //service function to update user
-  async updateUser(user, userAvatar) {
+  async updateUser(data, userAvatar) {
     try {
-      let avatarUrl
+      let avatarUrl;
       if (userAvatar !== null) {
         avatarUrl = await userRepository.uploadAvatar(userAvatar);
-        user.avatar_url = avatarUrl.path
+        user.avatar_url = avatarUrl.path;
       }
-      const data = await userRepository.updateUser(user);
-      logger.info(`UserService: Success to update user ${data.user.email}`);
-      return data;
+      const filteredData = Object.fromEntries(
+        // eslint-disable-next-line no-unused-vars
+        Object.entries(data).filter(([_, value]) => {
+          return value !== undefined && value !== '';
+        })
+      );
+      const user = await userRepository.updateUser(filteredData);
+      logger.info(`UserService: Success to update user ${user.user.email}`);
+      return user;
     } catch (error) {
       logger.error(
-        `UserService: Failed to update user ${user.email} because ${error.message}`
+        `UserService: Failed to update user ${data.email} because ${error.message}`
       );
       throw new Error(error.message);
     }

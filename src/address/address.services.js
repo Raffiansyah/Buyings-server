@@ -5,14 +5,12 @@ import {
   deleteAddress,
   updateAddress,
 } from './address.repository.js';
-import {
-  createAddressValidation,
-} from '../validation/addressValidation.js';
+import { createAddressValidation } from '../validation/addressValidation.js';
 
 const getAddressById = async (id, userId) => {
   const address = await findAddressById(id, userId);
   if (!address) {
-    throw new Error('Address not found');
+    throw new Error("Address not found");
   }
   return address;
 };
@@ -39,7 +37,13 @@ const updateAddressById = async (id, data, userId) => {
   if (!address) {
     throw new Error('Address not found');
   }
-  const updatedAddress = await updateAddress(id, data, userId);
+  const filteredData = Object.fromEntries(
+    // eslint-disable-next-line no-unused-vars
+    Object.entries(data).filter(([_, value]) => {
+      return value !== undefined && value !== '';
+    })
+  );
+  const updatedAddress = await updateAddress(id, filteredData, userId);
   return updatedAddress;
 };
 
