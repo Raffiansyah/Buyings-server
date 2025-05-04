@@ -22,7 +22,7 @@ export default new (class ProductRepository {
   //function to findProduct by order
   async findProducts(searchQuery, pageQuery, cateQuerry, filterQuery) {
     const page = parseInt(pageQuery) || 0;
-    const limit = 10;
+    const limit = 5;
     const offset = limit * page;
     const totalRows = await prisma.product.count({
       where: {
